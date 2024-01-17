@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Evaluation Assignment</string>
     <string name="leads">Leads</string>
+    <string name="leads_detail">Lead details</string>
+    <string name="chat">Chat</string>
+    <string name="call">Call</string>
+    <string name="lead_status">Lead status</string>
+    <string name="lead_quality">Lead quality</string>
 </resources>

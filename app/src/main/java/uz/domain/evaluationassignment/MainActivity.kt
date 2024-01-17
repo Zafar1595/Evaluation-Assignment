@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -160,7 +161,7 @@ fun TopBar(navController: NavController) {
                                 .show()
                         })
             }
-
+            Spacer(modifier = Modifier.size(12.dp))
             Box(
                 contentAlignment = androidx.compose.ui.Alignment.Center,
                 modifier = Modifier
@@ -200,7 +201,6 @@ fun BottomNavigationBar(navController: NavController) {
             .height(92.dp)
             .padding(16.dp, 0.dp, 16.dp, 16.dp)
             .clip(RoundedCornerShape(20.dp)),
-
         backgroundColor = colorResource(id = R.color.black85)
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -290,7 +290,7 @@ fun NavigationHost(
             arguments = listOf(navArgument("data") { type = NavType.IntType })
         ) { backStackEntry ->
             val leadId = backStackEntry.arguments?.getInt("data")
-            LeadsDetailScreen(leadId)
+            LeadsDetailScreen(leadId, navController = navController)
         }
     }
 }
