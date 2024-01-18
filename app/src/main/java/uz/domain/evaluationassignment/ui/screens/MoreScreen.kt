@@ -1,4 +1,4 @@
-package uz.domain.evaluationassignment.ui
+package uz.domain.evaluationassignment.ui.screens
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -6,8 +6,8 @@ import androidx.navigation.NavHostController
 
 
 @Composable
-fun ChatScreen(navController: NavHostController) {
+fun MoreScreen(navController: NavHostController) {
 
-    Text("ChatScreen")
+    Text("MoreScreen")
 
 }

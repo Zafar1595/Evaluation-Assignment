@@ -1,4 +1,4 @@
-package uz.domain.evaluationassignment.ui.leads
+package uz.domain.evaluationassignment.ui.screens.leads
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -17,22 +17,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomAppBar
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -182,6 +183,7 @@ fun Content(padding: PaddingValues, lead: Lead?) {
             Spacer(modifier = Modifier.size(24.dp))
             LeadInfo(lead, "Info") { }
             GeneralInfo(lead = lead)
+
         }
     }
 
@@ -190,6 +192,17 @@ fun Content(padding: PaddingValues, lead: Lead?) {
 
 @Composable
 fun LeadStatus(status: Status) {
+
+    var bottomSheetShow by remember {
+        mutableStateOf(false)
+    }
+
+    if (bottomSheetShow) {
+        StatusBottomSheetDialog(statusID = status.id) {
+            bottomSheetShow = false
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -224,6 +237,7 @@ fun LeadStatus(status: Status) {
                     color = colorResource(id = R.color.grey600),
                     style = TextStyle(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold),
                     modifier = Modifier
+                        .clickable { bottomSheetShow = true }
                         .align(alignment = Alignment.CenterVertically),
                     textAlign = TextAlign.End
                 )

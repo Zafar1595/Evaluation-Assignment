@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+
 android {
     namespace = "uz.domain.evaluationassignment"
     compileSdk = 34
@@ -71,4 +72,6 @@ dependencies {
     implementation("androidx.compose.material:material:1.5.4")
 
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
+
+    implementation("com.apollographql.apollo3:apollo-runtime:3.8.2")
 }

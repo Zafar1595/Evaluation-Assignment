@@ -45,12 +45,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import uz.domain.evaluationassignment.ui.CallsScreen
-import uz.domain.evaluationassignment.ui.ChatScreen
-import uz.domain.evaluationassignment.ui.HomeScreen
-import uz.domain.evaluationassignment.ui.MoreScreen
-import uz.domain.evaluationassignment.ui.leads.LeadsDetailScreen
-import uz.domain.evaluationassignment.ui.leads.LeadsScreen
+import uz.domain.evaluationassignment.ui.screens.CallsScreen
+import uz.domain.evaluationassignment.ui.screens.ChatScreen
+import uz.domain.evaluationassignment.ui.screens.HomeScreen
+import uz.domain.evaluationassignment.ui.screens.MoreScreen
+import uz.domain.evaluationassignment.ui.screens.leads.LeadsDetailScreen
+import uz.domain.evaluationassignment.ui.screens.leads.LeadsScreen
 import uz.domain.evaluationassignment.ui.theme.EvaluationAssignmentTheme
 
 class MainActivity : ComponentActivity() {

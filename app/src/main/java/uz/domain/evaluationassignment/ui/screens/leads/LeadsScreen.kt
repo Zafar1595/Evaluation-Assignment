@@ -1,4 +1,4 @@
-package uz.domain.evaluationassignment.ui.leads
+package uz.domain.evaluationassignment.ui.screens.leads
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
