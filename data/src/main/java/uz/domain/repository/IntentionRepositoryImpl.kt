@@ -20,4 +20,11 @@ class IntentionRepositoryImpl(private val dao: IntentionDao) : IIntentionReposit
         dao.addIntentionList(intentionsEntity.map { it.toDataModel() })
     }
 
+    override suspend fun getIntentions(): Result<List<IntentionEntity>> {
+        return try {
+            Result.Success(dao.getIntentions().map { it.toEntity() })
+        } catch (e: Exception) {
+            Result.Error(e.message ?: "Error getIntentions")
+        }
+    }
 }

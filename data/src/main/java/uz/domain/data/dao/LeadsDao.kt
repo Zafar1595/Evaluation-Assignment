@@ -11,7 +11,7 @@ import uz.domain.models.Lead
 interface LeadsDao {
 
     @Query("SELECT * FROM leads_list")
-    suspend fun getLeadsList(): Lead
+    suspend fun getLeadsList(): List<Lead>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addLead(lead: Lead)

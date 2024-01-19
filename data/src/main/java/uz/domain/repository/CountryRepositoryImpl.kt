@@ -22,5 +22,13 @@ class CountryRepositoryImpl(private val dao: CountryDao) : ICountryRepository {
         dao.addCountrysList(countrys = countrysEntity.map { it.toDataModel() })
     }
 
-
+    override suspend fun getAllCountrys(): Result<List<CountryEntity>> {
+        dao.getAllCountrys().let {
+            return if (it.isNotEmpty()) {
+                Result.Success(it.map { it.toEntity() })
+            } else {
+                Result.Error("No data")
+            }
+        }
+    }
 }

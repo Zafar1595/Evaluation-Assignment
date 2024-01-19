@@ -1,12 +1,10 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 
-package uz.domain.evaluationassignment.ui.screens.leads
+package uz.domain.evaluationassignment.ui.screens.leads.detail
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,40 +21,58 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.semantics.SemanticsProperties.ToggleableState
-import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
+import uz.domain.evaluationassignment.models.Intention
+import uz.domain.evaluationassignment.ui.utils.ResourceState
 
 @Composable
 fun StatusBottomSheetDialog(
     statusID: Int,
-    viewModel: LeadsViewModel = koinViewModel<LeadsViewModel>(),
+    viewModel: LeadDetailViewModel = koinViewModel<LeadDetailViewModel>(),
     onDismissRequest: () -> Unit
 ) {
+    viewModel.getAllIntentions()
+    val intentions = viewModel.allIntentions.observeAsState()
 
-    val statuses = viewModel.getStatuses()
+    when (intentions.value?.status) {
+        ResourceState.LOADING -> {
+        }
+
+        ResourceState.SUCCESS -> {
+            ShowBottomSheetDialog(intentions.value?.data, onDismissRequest, statusID)
+        }
+
+        ResourceState.ERROR -> {
+        }
+
+        else -> {}
+    }
 
 
+}
+
+@Composable
+fun ShowBottomSheetDialog(data: List<Intention>?, onDismissRequest: () -> Unit, statusID: Int) {
+    data ?: return
     ModalBottomSheet(onDismissRequest = {
         onDismissRequest.invoke()
     }) {
 
         val radioButtons = remember {
-            mutableStateOf(statuses.find { it.id == statusID }?.name)
+            mutableStateOf(data.find { it.id == statusID }?.name)
         }
 
         LazyColumn(content = {
             item {
-                statuses.forEach { status ->
+                data.forEach { status ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()

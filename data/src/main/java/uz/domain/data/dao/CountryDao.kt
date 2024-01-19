@@ -17,4 +17,6 @@ interface CountryDao {
     @Query("SELECT * FROM countries_list WHERE id = :countryId")
     suspend fun getCountryById(countryId: Int): Country
 
+    @Query("SELECT * FROM countries_list")
+    suspend fun getAllCountrys(): List<Country>
 }

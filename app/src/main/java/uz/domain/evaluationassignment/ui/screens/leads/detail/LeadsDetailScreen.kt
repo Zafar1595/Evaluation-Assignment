@@ -1,4 +1,4 @@
-package uz.domain.evaluationassignment.ui.screens.leads
+package uz.domain.evaluationassignment.ui.screens.leads.detail
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -26,6 +26,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,41 +35,78 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
 import org.koin.androidx.compose.koinViewModel
 import uz.domain.evaluationassignment.R
-import uz.domain.evaluationassignment.models.LeadT
-import uz.domain.evaluationassignment.models.Status
+import uz.domain.evaluationassignment.models.Country
+import uz.domain.evaluationassignment.models.Intention
+import uz.domain.evaluationassignment.models.Language
+import uz.domain.evaluationassignment.models.Lead
+import uz.domain.evaluationassignment.ui.screens.leads.LeadsViewModel
+import uz.domain.evaluationassignment.ui.screens.leads.ViewError
+import uz.domain.evaluationassignment.ui.screens.leads.ViewLoading
+import uz.domain.evaluationassignment.ui.utils.ResourceState
 
 @Composable
 fun LeadsDetailScreen(
     leadId: Int?,
-    viewModel: LeadsViewModel = koinViewModel<LeadsViewModel>(),
+    viewModel: LeadDetailViewModel = koinViewModel<LeadDetailViewModel>(),
     navController: NavHostController
 ) {
-    val lead = viewModel.getLeadById(leadId)
+    leadId ?: return
 
+    viewModel.getLeadById(leadId)
+
+    val leadState = viewModel.leadById.observeAsState()
+
+    when (leadState.value?.status) {
+        ResourceState.LOADING -> ViewLoading()
+        ResourceState.SUCCESS -> {
+            val lead = leadState.value?.data
+            lead ?: return
+            val intention = viewModel.intentionById.value
+            val country = viewModel.countryById.value
+            val language = viewModel.languageById.value
+
+            ShowViews(lead, intention, country, language, navController)
+        }
+
+        ResourceState.ERROR -> {
+            ViewError(leadState.value?.message)
+        }
+
+        else -> ViewError(message = "Unknown error")
+    }
+
+}
+
+@Composable
+fun ShowViews(
+    lead: Lead,
+    intention: Intention?,
+    country: Country?,
+    language: Language?,
+    navController: NavHostController
+) {
     Scaffold(
         contentColor = Color.Transparent,
         topBar = {
             TopBar(navController = navController)
         },
         content = { padding ->
-            Content(padding, lead)
+            Content(padding, lead, intention, country, language)
         },
         bottomBar = {
             BottomBar()
         })
-
 }
 
 @Composable
@@ -147,13 +185,20 @@ fun TopBar(navController: NavHostController) {
 }
 
 @Composable
-fun Content(padding: PaddingValues, lead: LeadT?) {
+fun Content(
+    padding: PaddingValues,
+    lead: Lead?,
+    intention: Intention?,
+    country: Country?,
+    language: Language?
+) {
     if (lead == null) return
+
     LazyColumn(modifier = Modifier.padding(padding)) {
         item {
             Column(modifier = Modifier.fillMaxWidth()) {
                 Image(
-                    painter = painterResource(id = lead.avatar),
+                    painter = rememberAsyncImagePainter(lead.adSource),
                     contentDescription = "Avatar",
                     modifier = Modifier
                         .align(alignment = androidx.compose.ui.Alignment.CenterHorizontally)
@@ -161,7 +206,9 @@ fun Content(padding: PaddingValues, lead: LeadT?) {
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    text = lead.fullName, fontSize = 16.sp, textAlign = TextAlign.Center,
+                    text = lead.firstName + " " + lead.lastName,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Center,
                     color = Color.Black,
                     modifier = Modifier
                         .align(alignment = androidx.compose.ui.Alignment.CenterHorizontally)
@@ -179,20 +226,24 @@ fun Content(padding: PaddingValues, lead: LeadT?) {
         }
 
         item {
-            LeadStatus(lead.status)
-            LeadQuality(lead.status)
+            LeadStatus(intention)
+            LeadQuality(intention)
             Spacer(modifier = Modifier.size(24.dp))
-            LeadInfo(lead, "Info") { }
-            GeneralInfo(lead = lead)
+            LeadInfo("Info") { }
+            GeneralInfo(
+                lead,
+                intention,
+                country,
+                language
+            )
 
         }
     }
-
-
 }
 
 @Composable
-fun LeadStatus(status: Status) {
+fun LeadStatus(status: Intention?) {
+    status ?: return
 
     var bottomSheetShow by remember {
         mutableStateOf(false)
@@ -269,7 +320,8 @@ fun LeadStatus(status: Status) {
 }
 
 @Composable
-fun LeadQuality(status: Status) {
+fun LeadQuality(status: Intention?) {
+    status ?: return
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -317,7 +369,7 @@ fun LeadQuality(status: Status) {
 }
 
 @Composable
-fun LeadInfo(lead: LeadT, type: String, onClick: () -> Unit) {
+fun LeadInfo(type: String, onClick: () -> Unit) {
     val types: List<String> = listOf("Info", "Activity", "Analytics")
     Box(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -360,14 +412,14 @@ fun LeadInfo(lead: LeadT, type: String, onClick: () -> Unit) {
 }
 
 @Composable
-fun GeneralInfo(lead: LeadT) {
+fun GeneralInfo(lead: Lead, intention: Intention?, country: Country?, language: Language?) {
 
     val mapList: MutableMap<String, String> = mutableMapOf(
-        "Lead intention" to "Select",
+        "Lead intention" to (intention?.name ?: "Select"),
         "AD Source" to "Select",
-        "Country" to "Select",
+        "Country" to (country?.name ?: "Select"),
         "City" to "Select",
-        "Language" to "Select"
+        "Language" to (language?.name ?: "Select")
     )
 
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
@@ -491,10 +543,4 @@ fun BottomBar() {
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    LeadsDetailScreen(leadId = 1, navController = NavHostController(LocalContext.current))
 }

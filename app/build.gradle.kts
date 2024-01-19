@@ -61,7 +61,8 @@ dependencies {
 
     val nav_compose = "2.7.6"
     val koin_version = "3.4.2"
-    val roomVersion = "2.6.1"
+    val lifecycle_version = "2.7.0"
+    val compose_version = "1.5.4"
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
@@ -90,11 +91,14 @@ dependencies {
     implementation ("io.insert-koin:koin-core:$koin_version")
     implementation ("io.insert-koin:koin-android:$koin_version")
 
-//    // Room components
-//    implementation("androidx.room:room-runtime:$roomVersion")
-////    kapt ("androidx.room:room-compiler:$roomVersion")
-//
-//    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-//    implementation("androidx.room:room-ktx:$roomVersion")
+    // ViewModel utilities for Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version")
+    // Saved state module for ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version")
+    implementation("androidx.compose.runtime:runtime-livedata:$compose_version")
+
+    implementation("io.coil-kt:coil-compose:2.0.0-rc01")
+
 
 }

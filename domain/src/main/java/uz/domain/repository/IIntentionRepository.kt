@@ -10,4 +10,6 @@ interface IIntentionRepository {
 
     suspend fun addIntentions(intentionsEntity: List<IntentionEntity>)
 
+    suspend fun getIntentions(): Result<List<IntentionEntity>>
+
 }

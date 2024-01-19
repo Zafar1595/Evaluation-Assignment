@@ -11,4 +11,6 @@ interface ICountryRepository {
 
     suspend fun addCountrys(countrysEntity: List<CountryEntity>)
 
+    suspend fun getAllCountrys(): Result<List<CountryEntity>>
+
 }

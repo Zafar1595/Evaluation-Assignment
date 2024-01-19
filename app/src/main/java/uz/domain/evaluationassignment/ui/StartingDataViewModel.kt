@@ -83,7 +83,7 @@ class StartingDataViewModel(
                 id = 234235,
                 firstName = "Annette",
                 lastName = "Black",
-                leadIntentionId = 5,
+                leadIntentionId = 11,
                 adSource = getURLForResource(R.drawable.annette_black) ?: "",
                 countryId = 5,
                 languageId = 6,
@@ -146,10 +146,10 @@ class StartingDataViewModel(
             ),
             Intention(
                 id = 11, name = "No answer",
-                textColor = Color.parseColor("#EC407A"),
-                backgroundColor = Color.parseColor("#EC407A"),
+                textColor = Color.parseColor("#545454"),
+                backgroundColor = Color.parseColor("#F6F6F6"),
                 statusCount = 5,
-                statusColor = Color.parseColor("#EC407A"),
+                statusColor = Color.parseColor("#545454"),
                 statusPercent = 54
             ),
             Intention(

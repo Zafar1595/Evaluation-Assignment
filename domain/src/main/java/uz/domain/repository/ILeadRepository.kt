@@ -5,7 +5,7 @@ import uz.domain.entity.LeadEntity
 
 interface ILeadRepository {
 
-    suspend fun getLeadsList(): Result<LeadEntity>
+    suspend fun getLeadsList(): Result<List<LeadEntity>>
 
     suspend fun getLeadById(id: Int): Result<LeadEntity>
 

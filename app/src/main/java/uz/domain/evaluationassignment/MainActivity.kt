@@ -53,7 +53,7 @@ import uz.domain.evaluationassignment.ui.screens.CallsScreen
 import uz.domain.evaluationassignment.ui.screens.ChatScreen
 import uz.domain.evaluationassignment.ui.screens.HomeScreen
 import uz.domain.evaluationassignment.ui.screens.MoreScreen
-import uz.domain.evaluationassignment.ui.screens.leads.LeadsDetailScreen
+import uz.domain.evaluationassignment.ui.screens.leads.detail.LeadsDetailScreen
 import uz.domain.evaluationassignment.ui.screens.leads.LeadsScreen
 import uz.domain.evaluationassignment.ui.theme.EvaluationAssignmentTheme
 
@@ -75,7 +75,7 @@ fun InsertStartData() {
     val preferences: SharedPreferences =
         context.getSharedPreferences("EvaluationAssignmentPreferences", Context.MODE_PRIVATE)
 
-    if (preferences.getBoolean("firstStart", true)) {
+    if (!preferences.getBoolean("firstStart", true)) { //TODO убрать ! после тестов
         val sdViewModel: StartingDataViewModel = koinViewModel<StartingDataViewModel>()
         sdViewModel.insertStartingData()
         preferences.edit().putBoolean("firstStart", false).apply()

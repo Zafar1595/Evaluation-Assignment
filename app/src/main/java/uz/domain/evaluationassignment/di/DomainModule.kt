@@ -10,8 +10,10 @@ import uz.domain.repository.IntentionRepositoryImpl
 import uz.domain.repository.LanguageRepositoryImpl
 import uz.domain.repository.LeadRepositoryImpl
 import uz.domain.usecase.country.AddCountrysUseCase
+import uz.domain.usecase.country.GetAllCountrysUseCase
 import uz.domain.usecase.country.GetCountryByIdUseCase
 import uz.domain.usecase.intention.AddIntentionsUseCase
+import uz.domain.usecase.intention.GetAllIntentionsUseCase
 import uz.domain.usecase.intention.GetIntentionByIdUseCase
 import uz.domain.usecase.language.AddLanguageUseCase
 import uz.domain.usecase.language.GetLanguageByIdUseCase
@@ -52,6 +54,10 @@ val domainModule = module {
         GetIntentionByIdUseCase(repository = get())
     }
 
+    factory<GetAllIntentionsUseCase> {
+        GetAllIntentionsUseCase(repository = get())
+    }
+
     factory<IIntentionRepository> {
         IntentionRepositoryImpl(dao = get())
     }
@@ -64,6 +70,10 @@ val domainModule = module {
 
     factory<GetCountryByIdUseCase> {
         GetCountryByIdUseCase(repository = get())
+    }
+
+    factory<GetAllCountrysUseCase> {
+        GetAllCountrysUseCase(repository = get())
     }
 
     factory<ICountryRepository> {

@@ -16,4 +16,7 @@ interface IntentionDao {
     @Query("SELECT * FROM intention_list WHERE id = :leadId")
     suspend fun getIntentionById(leadId: Int): Intention
 
+    @Query("SELECT * FROM intention_list")
+    suspend fun getIntentions(): List<Intention>
+
 }
