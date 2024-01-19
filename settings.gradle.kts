@@ -15,4 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Evaluation Assignment"
 include(":app")
- 
+include(":data")
+include(":domain")

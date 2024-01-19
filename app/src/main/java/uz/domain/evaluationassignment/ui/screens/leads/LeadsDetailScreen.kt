@@ -44,14 +44,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import org.koin.androidx.compose.koinViewModel
 import uz.domain.evaluationassignment.R
-import uz.domain.evaluationassignment.models.Lead
+import uz.domain.evaluationassignment.models.LeadT
 import uz.domain.evaluationassignment.models.Status
 
 @Composable
 fun LeadsDetailScreen(
     leadId: Int?,
-    viewModel: LeadsViewModel = LeadsViewModel(),
+    viewModel: LeadsViewModel = koinViewModel<LeadsViewModel>(),
     navController: NavHostController
 ) {
     val lead = viewModel.getLeadById(leadId)
@@ -146,7 +147,7 @@ fun TopBar(navController: NavHostController) {
 }
 
 @Composable
-fun Content(padding: PaddingValues, lead: Lead?) {
+fun Content(padding: PaddingValues, lead: LeadT?) {
     if (lead == null) return
     LazyColumn(modifier = Modifier.padding(padding)) {
         item {
@@ -316,7 +317,7 @@ fun LeadQuality(status: Status) {
 }
 
 @Composable
-fun LeadInfo(lead: Lead, type: String, onClick: () -> Unit) {
+fun LeadInfo(lead: LeadT, type: String, onClick: () -> Unit) {
     val types: List<String> = listOf("Info", "Activity", "Analytics")
     Box(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -359,7 +360,7 @@ fun LeadInfo(lead: Lead, type: String, onClick: () -> Unit) {
 }
 
 @Composable
-fun GeneralInfo(lead: Lead) {
+fun GeneralInfo(lead: LeadT) {
 
     val mapList: MutableMap<String, String> = mutableMapOf(
         "Lead intention" to "Select",

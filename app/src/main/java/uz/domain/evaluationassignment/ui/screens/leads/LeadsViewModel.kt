@@ -1,18 +1,32 @@
 package uz.domain.evaluationassignment.ui.screens.leads
 
 import android.graphics.Color
-import androidx.lifecycle.ViewModel
+import android.util.Log
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import uz.domain.Result
 import uz.domain.evaluationassignment.R
 import uz.domain.evaluationassignment.models.Lead
+import uz.domain.evaluationassignment.models.LeadT
 import uz.domain.evaluationassignment.models.Status
+import uz.domain.evaluationassignment.models.mapper.toEntity
+import uz.domain.evaluationassignment.ui.base.BaseViewModel
+import uz.domain.usecase.lead.AddLeadUseCase
+import uz.domain.usecase.lead.GetLeadByIdUseCase
+import uz.domain.usecase.lead.GetLeadsListUseCase
 
-class LeadsViewModel : ViewModel() {
+
+class LeadsViewModel(
+    private val getLeadsListUseCase: GetLeadsListUseCase,
+    private val getLeadByIdUseCase: GetLeadByIdUseCase,
+    private val addLeadUseCase: AddLeadUseCase
+) : BaseViewModel() {
 
     private val leads = listOf(
-        Lead(
+        LeadT(
             id = 234234,
             fullName = "Jane Cooper",
-            flag = R.drawable.af,
+            flag = uz.domain.evaluationassignment.R.drawable.af,
             status = Status(
                 id = 1,
                 name = "New",
@@ -24,7 +38,7 @@ class LeadsViewModel : ViewModel() {
             ),
             avatar = R.drawable.jane_cooper
         ),
-        Lead(
+        LeadT(
             id = 234235,
             fullName = "Albert Flores",
             flag = R.drawable.ae,
@@ -38,7 +52,7 @@ class LeadsViewModel : ViewModel() {
             ),
             avatar = R.drawable.albert_flores
         ),
-        Lead(
+        LeadT(
             id = 234233,
             fullName = "Jerome Bell",
             flag = R.drawable.af,
@@ -52,7 +66,7 @@ class LeadsViewModel : ViewModel() {
             ),
             avatar = R.drawable.jerome_bell
         ),
-        Lead(
+        LeadT(
             id = 234234,
             fullName = "Guy Hawkins",
             flag = R.drawable.uz,
@@ -66,7 +80,7 @@ class LeadsViewModel : ViewModel() {
             ),
             avatar = R.drawable.guy_awkins
         ),
-        Lead(
+        LeadT(
             id = 234235,
             fullName = "Annette Black",
             flag = R.drawable.ua,
@@ -80,7 +94,7 @@ class LeadsViewModel : ViewModel() {
             ),
             avatar = R.drawable.annette_black
         ),
-        Lead(
+        LeadT(
             id = 234236,
             fullName = "Courtney Henry",
             flag = R.drawable.us,
@@ -94,7 +108,7 @@ class LeadsViewModel : ViewModel() {
             ),
             avatar = R.drawable.courtney_henry
         ),
-        Lead(
+        LeadT(
             id = 234237,
             fullName = "Kristin Watson",
             flag = R.drawable.es,
@@ -108,7 +122,7 @@ class LeadsViewModel : ViewModel() {
             ),
             avatar = R.drawable.kristin_watson
         ),
-        Lead(
+        LeadT(
             id = 234238,
             fullName = "Savannah Nguyen",
             flag = R.drawable.it,
@@ -122,7 +136,7 @@ class LeadsViewModel : ViewModel() {
             ),
             avatar = R.drawable.savannah_nguyen
         ),
-        Lead(
+        LeadT(
             id = 234239,
             fullName = "Cameron Williamson",
             flag = R.drawable.kz,
@@ -138,11 +152,31 @@ class LeadsViewModel : ViewModel() {
         )
     )
 
-    fun getLeads(): List<Lead> {
+
+
+    fun addLead(lead: Lead) {
+        job = viewModelScope.launch {
+            val result = addLeadUseCase(lead.toEntity())
+            when (result) {
+                is Result.Success -> {
+                    Log.d("DaoTest", "addLead: ${result.data}")
+                }
+
+                is Result.Error -> {
+                    Log.d("DaoTest", "addLead: ${result.errorMessage}")
+                }
+            }
+        }
+    }
+
+
+    fun getLeads(): List<LeadT> {
+//        getLeadsListUseCase
         return leads
     }
 
-    fun getLeadById(leadId: Int?): Lead? {
+    fun getLeadById(leadId: Int?): LeadT? {
+//        getLeadByIdUseCase
         return leads.find { it.id == leadId }
     }
 

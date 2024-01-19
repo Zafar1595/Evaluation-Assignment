@@ -23,16 +23,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.compose.rememberNavController
-import uz.domain.evaluationassignment.R
+import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 import uz.domain.evaluationassignment.Screen
 import uz.domain.evaluationassignment.models.Lead
+import uz.domain.evaluationassignment.models.LeadT
 
 
 @Composable
-fun LeadsScreen(viewModel: LeadsViewModel = LeadsViewModel(), navController: NavController) {
+fun LeadsScreen(
+    viewModel: LeadsViewModel = koinViewModel<LeadsViewModel>(),
+    navController: NavController
+) {
 
     val data = viewModel.getLeads()
     LazyColumn(modifier = Modifier.padding(horizontal = 8.dp)) {
@@ -43,14 +46,12 @@ fun LeadsScreen(viewModel: LeadsViewModel = LeadsViewModel(), navController: Nav
                 }
             }
         }
-
     }
-
 }
 
 
 @Composable
-fun ItemLead(lead: Lead, onItenClick: () -> Unit) {
+fun ItemLead(lead: LeadT, onItenClick: () -> Unit) {
 
     Row(
         modifier = Modifier

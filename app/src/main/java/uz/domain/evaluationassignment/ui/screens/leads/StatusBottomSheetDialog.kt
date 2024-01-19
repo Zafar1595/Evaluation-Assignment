@@ -34,11 +34,12 @@ import androidx.compose.ui.semantics.SemanticsProperties.ToggleableState
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun StatusBottomSheetDialog(
     statusID: Int,
-    viewModel: LeadsViewModel = LeadsViewModel(),
+    viewModel: LeadsViewModel = koinViewModel<LeadsViewModel>(),
     onDismissRequest: () -> Unit
 ) {
 

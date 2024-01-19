@@ -1,5 +1,7 @@
 package uz.domain.evaluationassignment
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -45,6 +47,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import org.koin.androidx.compose.koinViewModel
+import uz.domain.evaluationassignment.ui.StartingDataViewModel
 import uz.domain.evaluationassignment.ui.screens.CallsScreen
 import uz.domain.evaluationassignment.ui.screens.ChatScreen
 import uz.domain.evaluationassignment.ui.screens.HomeScreen
@@ -56,11 +60,25 @@ import uz.domain.evaluationassignment.ui.theme.EvaluationAssignmentTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
 
             App()
         }
+    }
+
+
+}
+
+@Composable
+fun InsertStartData() {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val preferences: SharedPreferences =
+        context.getSharedPreferences("EvaluationAssignmentPreferences", Context.MODE_PRIVATE)
+
+    if (preferences.getBoolean("firstStart", true)) {
+        val sdViewModel: StartingDataViewModel = koinViewModel<StartingDataViewModel>()
+        sdViewModel.insertStartingData()
+        preferences.edit().putBoolean("firstStart", false).apply()
     }
 }
 
@@ -72,6 +90,7 @@ fun AppPreview() {
 
 @Composable
 fun App() {
+    InsertStartData()
 
     EvaluationAssignmentTheme(darkTheme = false) {
 
@@ -286,7 +305,8 @@ fun NavigationHost(
         composable(BottomNavItem.MoreScreen.route) {
             MoreScreen(navController = navController)
         }
-        composable(Screen.LeadsDetailScreen.route + "/{data}",
+        composable(
+            Screen.LeadsDetailScreen.route + "/{data}",
             arguments = listOf(navArgument("data") { type = NavType.IntType })
         ) { backStackEntry ->
             val leadId = backStackEntry.arguments?.getInt("data")
