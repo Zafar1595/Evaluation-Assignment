@@ -8,6 +8,4 @@ import androidx.navigation.NavHostController
 @Composable
 fun CallsScreen(navController: NavHostController) {
     Text("CallsScreen")
-
-
 }

@@ -7,7 +7,5 @@ import androidx.navigation.NavHostController
 
 @Composable
 fun MoreScreen(navController: NavHostController) {
-
     Text("MoreScreen")
-
 }

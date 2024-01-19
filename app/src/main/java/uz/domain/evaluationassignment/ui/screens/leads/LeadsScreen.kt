@@ -85,7 +85,6 @@ fun ViewError(message: String?) {
 @Composable
 fun ItemLead(intention: Intention?, country: Country?, lead: Lead, onItenClick: () -> Unit) {
 
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -124,7 +123,6 @@ fun ItemLead(intention: Intention?, country: Country?, lead: Lead, onItenClick: 
                         .align(alignment = androidx.compose.ui.Alignment.CenterVertically)
                 )
             }
-
         }
 
         intention?.let {
@@ -144,6 +142,5 @@ fun ItemLead(intention: Intention?, country: Country?, lead: Lead, onItenClick: 
                 )
             }
         }
-
     }
 }

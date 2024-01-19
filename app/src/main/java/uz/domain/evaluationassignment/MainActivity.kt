@@ -61,12 +61,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
             App()
         }
     }
-
-
 }
 
 @Composable
@@ -138,9 +135,7 @@ fun App() {
             )
         }
     }
-
 }
-
 
 @Composable
 fun TopBar(navController: NavController) {
@@ -203,13 +198,9 @@ fun TopBar(navController: NavController) {
                                 .show()
                         })
             }
-
-
         }
     }
-
 }
-
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
@@ -362,6 +353,5 @@ enum class Screen(val route: String) {
     ChatScreen("ChatScreen"),
     LeadsScreen("LeadsScreen"),
     MoreScreen("MoreScreen"),
-
     LeadsDetailScreen("LeadsDetailScreen"),
 }

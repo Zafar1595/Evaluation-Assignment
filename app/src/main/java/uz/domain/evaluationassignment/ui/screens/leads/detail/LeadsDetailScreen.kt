@@ -1,5 +1,6 @@
 package uz.domain.evaluationassignment.ui.screens.leads.detail
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,7 +52,6 @@ import uz.domain.evaluationassignment.models.Country
 import uz.domain.evaluationassignment.models.Intention
 import uz.domain.evaluationassignment.models.Language
 import uz.domain.evaluationassignment.models.Lead
-import uz.domain.evaluationassignment.ui.screens.leads.LeadsViewModel
 import uz.domain.evaluationassignment.ui.screens.leads.ViewError
 import uz.domain.evaluationassignment.ui.screens.leads.ViewLoading
 import uz.domain.evaluationassignment.ui.utils.ResourceState
@@ -85,7 +86,6 @@ fun LeadsDetailScreen(
 
         else -> ViewError(message = "Unknown error")
     }
-
 }
 
 @Composable
@@ -170,7 +170,9 @@ fun TopBar(navController: NavHostController) {
                 .background(
                     color = colorResource(id = R.color.grey),
                     shape = RoundedCornerShape(8.dp)
-                )
+                ).clickable {
+                    Toast.makeText(navController.context, "Clicked", Toast.LENGTH_SHORT).show()
+                }
                 .size(40.dp)
                 .weight(1f, false)
         ) {
@@ -236,7 +238,6 @@ fun Content(
                 country,
                 language
             )
-
         }
     }
 }
