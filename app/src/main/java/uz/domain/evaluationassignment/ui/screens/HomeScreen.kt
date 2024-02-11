@@ -6,6 +6,6 @@ import androidx.navigation.NavHostController
 
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(onClick: () -> Unit) {
     Text("HomeScreen")
 }

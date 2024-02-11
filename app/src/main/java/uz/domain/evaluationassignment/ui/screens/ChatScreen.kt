@@ -6,6 +6,6 @@ import androidx.navigation.NavHostController
 
 
 @Composable
-fun ChatScreen(navController: NavHostController) {
+fun ChatScreen(onClick: () -> Unit) {
     Text("ChatScreen")
 }

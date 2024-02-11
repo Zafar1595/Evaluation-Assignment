@@ -6,6 +6,6 @@ import androidx.navigation.NavHostController
 
 
 @Composable
-fun CallsScreen(navController: NavHostController) {
+fun CallsScreen(onClick: () -> Unit) {
     Text("CallsScreen")
 }

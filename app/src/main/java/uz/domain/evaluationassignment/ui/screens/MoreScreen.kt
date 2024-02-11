@@ -6,6 +6,6 @@ import androidx.navigation.NavHostController
 
 
 @Composable
-fun MoreScreen(navController: NavHostController) {
+fun MoreScreen(onClick: () -> Unit) {
     Text("MoreScreen")
 }

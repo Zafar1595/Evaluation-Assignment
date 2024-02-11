@@ -34,10 +34,8 @@ import uz.domain.evaluationassignment.ui.utils.ResourceState
 
 
 @Composable
-fun LeadsScreen(
-    viewModel: LeadsViewModel = koinViewModel<LeadsViewModel>(),
-    navController: NavController,
-) {
+fun LeadsScreen(leadOnClick: (leadId: Int) -> Unit) {
+    val viewModel: LeadsViewModel = koinViewModel<LeadsViewModel>()
     val viewState = viewModel.leadsList.observeAsState()
 
     LaunchedEffect(key1 = viewState, block = {
@@ -57,7 +55,7 @@ fun LeadsScreen(
                             viewModel.allCountrys.value?.find { c -> c.id == it.countryId },
                             it
                         ) {
-                            navController.navigate("${Screen.LeadsDetailScreen.route}/${it.id}")
+                            leadOnClick.invoke(it.id)
                         }
                     }
                 }

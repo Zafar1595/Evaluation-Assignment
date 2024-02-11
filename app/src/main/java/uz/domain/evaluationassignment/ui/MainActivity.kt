@@ -38,7 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -116,14 +116,32 @@ fun App() {
             Scaffold(
                 topBar = {
                     if (showBottomBar)
-                        TopBar(navController = navController)
+                        TopBar(
+                            addUserOnClick = {
+                                Toast.makeText(
+                                    navController.context,
+                                    "Add User",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            },
+                            searchOnClick = {
+                                Toast.makeText(navController.context, "Search", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        )
                 },
 
                 bottomBar = {
                     if (showBottomBar) {
+                        val navBackStackEntry by navController.currentBackStackEntryAsState()
                         BottomNavigationBar(
-                            navController = navController
-                        )
+                            navBackStackEntry = navBackStackEntry
+                        ) { route ->
+                            navController.navigate(route) {
+                                popUpTo(navController.graph.startDestinationId)
+                                launchSingleTop = true
+                            }
+                        }
                     }
                 },
                 content = { padding ->
@@ -138,7 +156,7 @@ fun App() {
 }
 
 @Composable
-fun TopBar(navController: NavController) {
+fun TopBar(addUserOnClick: () -> Unit, searchOnClick: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -170,9 +188,7 @@ fun TopBar(navController: NavController) {
                     modifier = Modifier
                         .padding(10.dp, 10.dp, 10.dp, 10.dp)
                         .clickable {
-                            Toast
-                                .makeText(navController.context, "Settings", Toast.LENGTH_SHORT)
-                                .show()
+                            addUserOnClick.invoke()
                         })
             }
             Spacer(modifier = Modifier.size(12.dp))
@@ -193,9 +209,7 @@ fun TopBar(navController: NavController) {
                         .size(60.dp)
                         .padding(10.dp, 10.dp, 10.dp, 10.dp)
                         .clickable {
-                            Toast
-                                .makeText(navController.context, "Settings", Toast.LENGTH_SHORT)
-                                .show()
+                            searchOnClick.invoke()
                         })
             }
         }
@@ -203,7 +217,10 @@ fun TopBar(navController: NavController) {
 }
 
 @Composable
-fun BottomNavigationBar(navController: NavController) {
+fun BottomNavigationBar(
+    navBackStackEntry: NavBackStackEntry?,
+    itemOnClick: (route: String) -> Unit
+) {
 
     BottomNavigation(
         modifier = Modifier
@@ -213,7 +230,7 @@ fun BottomNavigationBar(navController: NavController) {
             .clip(RoundedCornerShape(20.dp)),
         backgroundColor = colorResource(id = R.color.black85)
     ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
+
         val currentRoute = navBackStackEntry?.destination?.route
 
         val items = listOf(
@@ -232,10 +249,7 @@ fun BottomNavigationBar(navController: NavController) {
                 modifier = Modifier
                     .padding(0.dp, 16.dp),
                 onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo(navController.graph.startDestinationId)
-                        launchSingleTop = true
-                    }
+                    itemOnClick(item.route)
                 },
                 icon = {
                     Box(
@@ -272,7 +286,7 @@ fun BottomNavigationBar(navController: NavController) {
 
 @Composable
 fun NavigationHost(
-    navController: NavHostController,
+    navController: NavHostController, //TODO как тут избавиться от этого navController?
     padding: PaddingValues,
 ) {
 
@@ -282,76 +296,35 @@ fun NavigationHost(
         modifier = Modifier.padding(padding)
     ) {
         composable(BottomNavItem.HomeScreen.route) {
-            HomeScreen(navController = navController)
+            HomeScreen {
+            }
         }
         composable(BottomNavItem.CallsScreen.route) {
-            CallsScreen(navController = navController)
+            CallsScreen {
+            }
         }
         composable(BottomNavItem.ChatScreen.route) {
-            ChatScreen(navController = navController)
+            ChatScreen {
+            }
         }
         composable(BottomNavItem.LeadsScreen.route) {
-            LeadsScreen(navController = navController)
+            LeadsScreen(leadOnClick = { leadId -> // TODO правильно ли настроена навигация?
+                navController.navigate("${Screen.LeadsDetailScreen.route}/${leadId}")
+            })
         }
         composable(BottomNavItem.MoreScreen.route) {
-            MoreScreen(navController = navController)
+            MoreScreen {
+            }
         }
         composable(
             Screen.LeadsDetailScreen.route + "/{data}",
             arguments = listOf(navArgument("data") { type = NavType.IntType })
         ) { backStackEntry ->
-            val leadId = backStackEntry.arguments?.getInt("data")
-            LeadsDetailScreen(leadId, navController = navController)
+            LeadsDetailScreen(
+                backStackEntry.arguments?.getInt("data"),
+                navController = navController   //TODO как тут избавиться от navController?
+            )
         }
     }
 }
 
-sealed class BottomNavItem(
-    val route: String,
-    val icon: Int,
-    val label: String
-) {
-    data object HomeScreen :
-        BottomNavItem(
-            Screen.HomeScreen.route,
-            R.drawable.home,
-            "Home"
-        )
-
-    data object CallsScreen :
-        BottomNavItem(
-            Screen.CallsScreen.route,
-            R.drawable.phone,
-            "Calls"
-        )
-
-    data object ChatScreen :
-        BottomNavItem(
-            Screen.ChatScreen.route,
-            R.drawable.messages_square,
-            "Chat"
-        )
-
-    data object LeadsScreen :
-        BottomNavItem(
-            Screen.LeadsScreen.route,
-            R.drawable.users,
-            "Leads"
-        )
-
-    data object MoreScreen :
-        BottomNavItem(
-            Screen.MoreScreen.route,
-            R.drawable.more_horizontal,
-            "More"
-        )
-}
-
-enum class Screen(val route: String) {
-    HomeScreen("HomeScreen"),
-    CallsScreen("CallsScreen"),
-    ChatScreen("ChatScreen"),
-    LeadsScreen("LeadsScreen"),
-    MoreScreen("MoreScreen"),
-    LeadsDetailScreen("LeadsDetailScreen"),
-}
