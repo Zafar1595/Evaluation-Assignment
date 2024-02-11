@@ -21,14 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import org.koin.androidx.compose.koinViewModel
-import uz.domain.evaluationassignment.Screen
+import uz.domain.evaluationassignment.ui.Screen
 import uz.domain.evaluationassignment.models.Country
 import uz.domain.evaluationassignment.models.Intention
 import uz.domain.evaluationassignment.models.Lead
@@ -38,7 +36,7 @@ import uz.domain.evaluationassignment.ui.utils.ResourceState
 @Composable
 fun LeadsScreen(
     viewModel: LeadsViewModel = koinViewModel<LeadsViewModel>(),
-    navController: NavController
+    navController: NavController,
 ) {
     val viewState = viewModel.leadsList.observeAsState()
 

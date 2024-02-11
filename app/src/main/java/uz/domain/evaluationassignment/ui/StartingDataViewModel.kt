@@ -2,22 +2,18 @@ package uz.domain.evaluationassignment.ui
 
 import android.graphics.Color
 import android.net.Uri
-import android.util.Log
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import uz.domain.Result
 import uz.domain.evaluationassignment.R
 import uz.domain.evaluationassignment.models.Country
 import uz.domain.evaluationassignment.models.Language
 import uz.domain.evaluationassignment.models.Lead
 import uz.domain.evaluationassignment.models.Intention
 import uz.domain.evaluationassignment.models.mapper.toEntity
-import uz.domain.evaluationassignment.ui.base.BaseViewModel
 import uz.domain.usecase.country.AddCountrysUseCase
 import uz.domain.usecase.intention.AddIntentionsUseCase
-import uz.domain.usecase.intention.GetIntentionByIdUseCase
 import uz.domain.usecase.language.AddLanguageUseCase
-import uz.domain.usecase.lead.AddLeadUseCase
 import uz.domain.usecase.lead.AddLeadsUseCase
 
 class StartingDataViewModel(
@@ -25,10 +21,10 @@ class StartingDataViewModel(
     private val addIntentionsUseCase: AddIntentionsUseCase,
     private val addCountrysUseCase: AddCountrysUseCase,
     private val addLanguageUseCase: AddLanguageUseCase
-) : BaseViewModel() {
+) : ViewModel() {
 
     fun insertStartingData() {
-        job = viewModelScope.launch {
+        viewModelScope.launch {
             addIntentionsUseCase(getIntentions().map { it.toEntity() })
             addCountrysUseCase(getCountry().map { it.toEntity() })
             addLanguageUseCase(getLanguage().map { it.toEntity() })

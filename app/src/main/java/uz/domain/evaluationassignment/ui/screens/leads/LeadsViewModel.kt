@@ -2,6 +2,7 @@ package uz.domain.evaluationassignment.ui.screens.leads
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import uz.domain.Result
@@ -10,7 +11,6 @@ import uz.domain.evaluationassignment.models.Intention
 import uz.domain.evaluationassignment.models.Lead
 import uz.domain.evaluationassignment.models.mapper.toAppModel
 import uz.domain.evaluationassignment.models.mapper.toEntity
-import uz.domain.evaluationassignment.ui.base.BaseViewModel
 import uz.domain.evaluationassignment.ui.utils.Resource
 import uz.domain.usecase.country.GetAllCountrysUseCase
 import uz.domain.usecase.intention.GetAllIntentionsUseCase
@@ -22,13 +22,13 @@ class LeadsViewModel(
     private val addLeadUseCase: AddLeadUseCase,
     private val getAllIntentionsUseCase: GetAllIntentionsUseCase,
     private val getAllCountrysUseCase: GetAllCountrysUseCase,
-) : BaseViewModel() {
+) : ViewModel() {
 
     val leadsList: MutableLiveData<Resource<List<Lead>>> = MutableLiveData()
 
     fun getLeadsList() {
         leadsList.value = Resource.loading()
-        job = viewModelScope.launch {
+        viewModelScope.launch {
             when (val result = getLeadsListUseCase()) {
                 is Result.Success -> {
                     getIntentions {
@@ -78,7 +78,7 @@ class LeadsViewModel(
     }
 
     fun addLead(lead: Lead) {
-        job = viewModelScope.launch {
+         viewModelScope.launch {
             val result = addLeadUseCase(lead.toEntity())
             when (result) {
                 is Result.Success -> {

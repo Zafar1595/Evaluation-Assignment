@@ -1,4 +1,4 @@
-package uz.domain.evaluationassignment
+package uz.domain.evaluationassignment.ui
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -48,7 +48,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.koin.androidx.compose.koinViewModel
-import uz.domain.evaluationassignment.ui.StartingDataViewModel
+import uz.domain.evaluationassignment.R
 import uz.domain.evaluationassignment.ui.screens.CallsScreen
 import uz.domain.evaluationassignment.ui.screens.ChatScreen
 import uz.domain.evaluationassignment.ui.screens.HomeScreen

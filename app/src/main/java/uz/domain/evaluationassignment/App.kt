@@ -1,4 +1,4 @@
-package uz.domain.evaluationassignment.ui
+package uz.domain.evaluationassignment
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext

@@ -2,6 +2,7 @@ package uz.domain.evaluationassignment.ui.screens.leads.detail
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import uz.domain.Result
@@ -10,7 +11,6 @@ import uz.domain.evaluationassignment.models.Intention
 import uz.domain.evaluationassignment.models.Language
 import uz.domain.evaluationassignment.models.Lead
 import uz.domain.evaluationassignment.models.mapper.toAppModel
-import uz.domain.evaluationassignment.ui.base.BaseViewModel
 import uz.domain.evaluationassignment.ui.utils.Resource
 import uz.domain.usecase.country.GetCountryByIdUseCase
 import uz.domain.usecase.intention.GetAllIntentionsUseCase
@@ -24,12 +24,12 @@ class LeadDetailViewModel(
     private val getLanguageByIdUseCase: GetLanguageByIdUseCase,
     private val getCountryByIdUseCase: GetCountryByIdUseCase,
     private val getAllIntentionsUseCase: GetAllIntentionsUseCase
-) : BaseViewModel() {
+) : ViewModel() {
 
     val leadById: MutableLiveData<Resource<Lead>> = MutableLiveData()
     fun getLeadById(id: Int) {
 
-        job = viewModelScope.launch {
+        viewModelScope.launch {
             when (val result = getLeadByIdUseCase(id)) {
                 is Result.Success -> {
                     getLanguageById(result.data?.languageId ?: 0)
@@ -89,7 +89,7 @@ class LeadDetailViewModel(
 
     val allIntentions: MutableLiveData<Resource<List<Intention>>> = MutableLiveData()
     fun getAllIntentions() {
-        job = viewModelScope.launch {
+        viewModelScope.launch {
             when (val result = getAllIntentionsUseCase()) {
                 is Result.Success -> {
                     allIntentions.value = Resource.success(result.data?.map { it.toAppModel() })
